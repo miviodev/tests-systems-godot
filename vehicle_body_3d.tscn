@@ -1,0 +1,124 @@
+[gd_scene load_steps=9 format=3 uid="uid://sviduxoi3uun"]
+
+[ext_resource type="Script" uid="uid://oa5ut1qin1p1" path="res://vehicle_body_3d2.gd" id="1_d41w2"]
+[ext_resource type="ArrayMesh" uid="uid://jage12udpp4" path="res://whl.obj" id="2_uq1ss"]
+[ext_resource type="ArrayMesh" uid="uid://8pr85lee72cg" path="res://gear_lie.obj" id="3_tfggr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ckb0e"]
+size = Vector3(0.84191895, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oyp1f"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nn6f8"]
+material = SubResource("StandardMaterial3D_oyp1f")
+size = Vector3(1.5, 0.2, 3)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4ou71"]
+points = PackedVector3Array(0.75, 0.1, 1.5, 0.75, -0.1, 1.5, 0.75, 0.1, -1.5, -0.75, 0.1, 1.5, -0.75, -0.1, 1.5, 0.75, -0.1, -1.5, -0.75, 0.1, -1.5, -0.75, -0.1, -1.5)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_oepod"]
+height = 0.2
+
+[node name="VehicleBody3D" type="VehicleBody3D"]
+mass = 1000.0
+script = ExtResource("1_d41w2")
+
+[node name="Area3D" type="Area3D" parent="." groups=["car"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7644606, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" groups=["car"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4209594, 0, 0)
+shape = SubResource("BoxShape3D_ckb0e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_nn6f8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_4ou71")
+
+[node name="Wheel1" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.5, 1.3193161)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.4
+wheel_radius = 0.4
+wheel_rest_length = 0.1
+wheel_friction_slip = 2.0
+suspension_travel = 2.0
+suspension_stiffness = 60.0
+damping_compression = 1.0
+damping_relaxation = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wheel1"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_oepod")
+
+[node name="Wheel2" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.5, -1.446505)
+wheel_roll_influence = 0.4
+wheel_radius = 0.4
+wheel_rest_length = 0.1
+wheel_friction_slip = 2.0
+suspension_travel = 2.0
+suspension_stiffness = 60.0
+damping_compression = 1.0
+damping_relaxation = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wheel2"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_oepod")
+
+[node name="Wheel3" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.5, 1.3193161)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.4
+wheel_radius = 0.4
+wheel_rest_length = 0.1
+wheel_friction_slip = 2.0
+suspension_travel = 2.0
+suspension_stiffness = 60.0
+damping_compression = 1.0
+damping_relaxation = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wheel3"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_oepod")
+
+[node name="Wheel4" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.5, -1.446505)
+wheel_roll_influence = 0.4
+wheel_radius = 0.4
+wheel_rest_length = 0.1
+wheel_friction_slip = 2.0
+suspension_travel = 2.0
+suspension_stiffness = 60.0
+damping_compression = 1.0
+damping_relaxation = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wheel4"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_oepod")
+
+[node name="Whl" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.3113416e-09, 0, -0.03, 0, 0.03, 0, 0.03, 0, -1.3113416e-09, 0.016236573, 0.40257466, 0.68724525)
+mesh = ExtResource("2_uq1ss")
+skeleton = NodePath("../..")
+
+[node name="GearLie" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.025, 0, -3.0199159e-09, 0, 0.02, 0, 3.774895e-09, 0, -0.02, 0.0034424067, 0.4002467, 0.7666217)
+mesh = ExtResource("3_tfggr")
+skeleton = NodePath("../..")
+
+[node name="Enter Marker" type="Marker3D" parent="."]
+
+[node name="Exit Marker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9017473, 0.17217767, 0)
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.8693466, 1.069905)
+text = "1"
+font_size = 8
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

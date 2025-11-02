@@ -1,0 +1,52 @@
+[gd_scene load_steps=9 format=3 uid="uid://b5oed2a7x6tng"]
+
+[ext_resource type="Texture2D" uid="uid://cfpvj3kfqf7oc" path="res://images.jpg" id="1_7822p"]
+[ext_resource type="PackedScene" uid="uid://lnqvpsko3u2e" path="res://car.tscn" id="2_mshqt"]
+[ext_resource type="PackedScene" uid="uid://c61rbxfy3jr2a" path="res://character_body_3d.tscn" id="3_o4yed"]
+[ext_resource type="PackedScene" uid="uid://sviduxoi3uun" path="res://vehicle_body_3d.tscn" id="3_vibc5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_noarx"]
+render_priority = 1
+albedo_texture = ExtResource("1_7822p")
+albedo_texture_force_srgb = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_uoj53"]
+material = SubResource("StandardMaterial3D_noarx")
+size = Vector3(3096, 0.2, 100)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o4yed"]
+points = PackedVector3Array(1554.5873, -6.687234, 61.98298, -1554.5873, -6.687234, -56.587234, 1554.5873, -6.687234, -56.587234, -1554.5873, -6.687234, 61.98298)
+
+[sub_resource type="Environment" id="Environment_06lh1"]
+background_mode = 1
+background_color = Color(0.57409465, 0.71350867, 1, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03379631, -0.99149084, 0.08174491)
+mesh = SubResource("BoxMesh_uoj53")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009069443, 5.862327, -11.899167)
+shape = SubResource("ConvexPolygonShape3D_o4yed")
+
+[node name="Car" parent="StaticBody3D" instance=ExtResource("2_mshqt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4000118, 0.25743198, -1.7369304)
+
+[node name="Car2" parent="StaticBody3D" instance=ExtResource("2_mshqt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.776856, 0.099999905, -0.9966116)
+
+[node name="VehicleBody3D" parent="StaticBody3D" instance=ExtResource("3_vibc5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0116673, 0.17509174, 3.8991814)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9845277, 0.17522927, 0, -0.17522927, 0.9845277, 0, 2.2657151, 3.3146286)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_06lh1")
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("3_o4yed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8081317, 0.10000014, 3.1051688)

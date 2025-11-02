@@ -6,24 +6,26 @@ const JUMP_VELOCITY = 4.5
 
 var grabbed_collider = null
 var grabbing = false
-
+var disabled = false
+var sitting = false
 @onready var rotation_helper = $CameraHelper
 @export var MOUSE_SENSITIVITY: float = 0.7
 @onready var raycast = $CameraHelper/Camera/RayCast3D
-
-# Для расчёта скорости "руки" при броске
-
+@onready var label = $Control/StatusLabel
+@export var character_texture: Texture2D
+@onready var old_texture = $Control/Container/Sprite2D.texture
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
-	# Gravity
+	if Input.is_action_just_released("exit"):
+		get_tree().quit()
+
+	if disabled: return
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	else:
-		velocity.y = 0  # Optional: stabilize on ground
 
-	# Jump
+
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
@@ -42,18 +44,24 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Exit (optional)
-	if Input.is_action_just_released("exit"):
-		get_tree().quit()
-
+	if $Control/Container/Sprite2D.texture == character_texture: $Control/Container/Sprite2D.texture = old_texture
 	if raycast.is_colliding():
 		var collider = raycast.get_collider()
+		print(collider.name)
 		if collider.is_in_group("draggable"):
+			label.text = "grub (E)"
 			if Input.is_action_just_pressed("grab"):
 				grabbed_collider = collider
 				grab(collider)
+		if collider.is_in_group("car"):
+			label.text = "Sit (F)"
+			$Control/Container/Sprite2D.texture = character_texture
+			if Input.is_action_just_pressed("sit"): collider.get_parent().enter_car(self)
+	else:
+		label.text = "..."
 	if Input.is_action_just_released("grab") and grabbed_collider:
 			ungrab(grabbed_collider)
+	
 
 	# Бросок по нажатию, даже если "grab" всё ещё зажата
 	if grabbed_collider and Input.is_action_just_pressed("throw_dragged") and grabbing:
@@ -92,7 +100,6 @@ func update_grab_pos():
 	var force = error * spring_strength - grabbed_collider.linear_velocity * damping
 
 	grabbed_collider.apply_central_force(force)
-	grabbed_collider.rotation.y = lerp(grabbed_collider.rotation.y, rotation.y, 0.04)
 func ungrab(collider: RigidBody3D):
 	grabbing = false
 	collider.gravity_scale = 1.0
@@ -102,3 +109,6 @@ func throw(collider: RigidBody3D):
 	var direction_from_player = (collider.global_transform.origin - global_transform.origin).normalized()
 	collider.apply_impulse(direction_from_player * 6.0)
 	ungrab(collider)
+func input_toggle():
+	disabled = not disabled
+func sit(): return sitting
